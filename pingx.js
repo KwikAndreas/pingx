@@ -19,7 +19,7 @@ async function speedTest() {
       const client =
         urlObj.protocol === "https:" ? require("https") : require("http");
       const req = client.get(urlObj, (res) => {
-        res.on("data", (chunk) => {
+        res.on("data", (chunk) => { 
           downloaded += chunk.length;
         });
         res.on("end", () => {
@@ -89,7 +89,7 @@ const program = new Command();
 const banner = `
 ${chalk.cyan("┌─────────────────────────────────────────┐")}
 ${chalk.cyan("│")}           ${chalk.bold.magenta(
-  "PingX v1.0.0"
+  "PingX v1.0.1"
 )}             ${chalk.cyan("│")}
 ${chalk.cyan("│")}     ${chalk.gray(
   "Improved ping with colors"

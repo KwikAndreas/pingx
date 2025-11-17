@@ -1,170 +1,156 @@
-#PingX - Enhanced Ping Command with Colors 🌈
+# PingX - Enhanced Cross-Platform Ping CLI 🔵⚡
 
-PingX is an enhancement to the traditional ping command, featuring attractive and informative color styling.
+PingX is a modern, colorful, and feature-rich alternative to the traditional **ping** command.  
+It provides improved readability, detailed statistics, speed test capability, and a polished CLI experience across **Windows, Linux, and macOS**.
+
+---
 
 ## ✨ Features
 
-- **Responsive Color Styling**: Response time is displayed in different colors based on speed
+### 🎨 Color-Enhanced Output  
+Ping responses are displayed with dynamic colors based on latency:
 
-- 🟢 **Green**: < 50ms (Very Fast)
-- 🟡 **Yellow**: 50-100ms (Normal)
-- 🟠 **Orange**: 100-200ms (Somewhat Slow)
-- 🔴 **Red**: > 200ms (Slow)
+| Latency         | Color  | Meaning        |
+|-----------------|--------|----------------|
+| **< 50ms**      | 🟢 Green  | Excellent       |
+| **50–100ms**    | 🟡 Yellow | Good            |
+| **100–200ms**   | 🟠 Orange | Fair            |
+| **> 200ms**     | 🔴 Red    | Poor            |
 
-- **ASCII Banner**: Attractive display when the application starts
-- **Timestamp**: Each response is accompanied by a timestamp
-- **Detailed Statistics**: Displays complete statistics after the ping is complete
-- **Cross-Platform**: Works on Windows, Linux, and macOS
+### 🏷 Rich CLI Output  
+- Beautiful ASCII banner  
+- Timestamp for each response  
+- Error detection (timeout, unreachable, etc.)
+
+### 📊 Detailed Statistics  
+At the end of execution, PingX shows:
+- Packets sent/received/lost  
+- Packet loss percentage  
+- Minimum, maximum, and average latency  
+
+### 🌐 Internet Speed Test (Optional `-s`)  
+PingX can run a lightweight download/upload speed test after pinging:
+- Downloads a 1MB test file  
+- Uploads 512KB of data  
+- Displays Mbps results
+
+### 🖥 Cross-Platform  
+Works with native `ping` on:
+- Windows (`ping -n`)
+- Linux (`ping -c`)
+- macOS (`ping -c`)
+
+---
 
 ## 🚀 Installation
 
-### Global Installation
-
-``` bash
-npm install -g .
+### Global Installation (Recommended for CLI usage)
+```sh
+npm install -g @xavorus/pingx
 ```
 
-### Local Installation for Development
-
-``` bash
+### Local Installation (Development)
+```sh
 npm install
 ```
 
-## 📋 Dependencies
+---
 
-This package requires:
+## 💻 Usage Examples
 
-- `chalk`: To set terminal colors
-- `commander`: To parse command-line arguments
-
-## 💻 Usage
-
-### Basic Usage
-
-``` bash
-#Ping once
+### Basic Ping
+```sh
 pingx google.com
-
-# Ping a specific number of times
-pingx 8.8.8.8 -c 4
-
-# Ping with a custom interval (in ms)
-pingx 1.1.1.1 -c 5 -i 2000
-
-# Ping with a custom timeout (in seconds)
-pingx example.com -c 3 -t 10
-
-# Combination of all options
-pingx 8.8.8.8 -c 5 -i 1500 -t 5
-
-# Ping with speed test
-pingx google.com -c 3 -S
-
-# Ping with all options including speed test
-pingx 8.8.8.8 -c 3 -t 2 -s
 ```
 
-### Command Options
+### Ping a specific number of packets
+```sh
+pingx 8.8.8.8 -c 4
+```
 
-- `-c, --count <number>`: Number of packets to send
-- `-i, --interval <ms>`: Interval between packets (minimum 100ms)
-- `-t, --timeout <seconds>`: Timeout for each ping in seconds (default: 4)
-- `-s, --speed`: Run a simple download and upload speed measurement after displaying ping statistics
-- `--help`: Display help
-- `--version`: Display version
+### Custom interval (milliseconds)
+```sh
+pingx 1.1.1.1 -c 5 -i 2000
+```
 
-### Sample Output
+### Custom timeout (seconds)
+```sh
+pingx example.com -c 3 -t 10
+```
 
-On success:
+### Run with speed test
+```sh
+pingx google.com -c 3 -s
+```
 
+---
+
+## ⚙️ Command Options
+
+| Option | Description |
+|--------|-------------|
+| `-c, --count <num>` | Number of packets to send |
+| `-i, --interval <ms>` | Delay between packets (min 100ms) |
+| `-t, --timeout <sec>` | Timeout per packet (default: 4s) |
+| `-s, --speed` | Run speed test after pinging |
+| `--help` | Show help |
+| `--version` | Show version |
+
+---
+
+## 📦 Sample Output
+
+### Success
 ```
 [14:30:15] ● Reply from 8.8.8.8: bytes=32 time=45ms TTL=114
 ```
 
-On Time Timeout:
-
+### Timeout
 ```
 [14:30:16] ● Request timed out.
 ```
 
-With speed test (-s):
-
+### With Speed Test
 ```
-─ ... Mbps
-─ ...
+Download: 28.52 Mbps
+Upload:   10.31 Mbps
 ```
 
-## 🎨 Color Code
-
-Response time is displayed in different colors:
-
-- **< 50ms**: 🟢 Green (Excellent)
-- **50-100ms**: 🟡 Yellow (Good)
-- **100-200ms**: 🟠 Orange (Fair)
-- **> 200ms**: 🔴 Red (Poor)
-
-## 📊 Statistics
-
-After the ping is complete, PingX will display:
-
-- Number of packets sent and received
-- Percentage packet loss
-- Minimum, maximum, and average response times
-
-### 🚀 Speed ​​Test (-s Option)
-
-When using the `-s` option, PingX will perform a simple internet speed measurement after displaying the ping statistics:
-
-- **Download Speed**: Downloads a 1MB test file from httpbin.org
-- **Upload Speed**: Uploads 512KB of test data to httpbin.org
-- **Results in Mbps**: Displayed in an easy-to-read format
-
-**Note**: The speed test uses an HTTP endpoint to avoid SSL certificate issues and provide more consistent results.
+---
 
 ## 🛠 Development
 
-### Testing
-
-``` bash
+### Run tests
+```sh
 npm test
 ```
 
-### Manual Testing
-
-``` bash
+### Manual test
+```sh
 node pingx.js google.com -c 3
 ```
 
-## 📝 Platform Support
+### Install globally from source
+```sh
+npm run install-global
+```
 
-- ✅ Windows (using `ping -n`)
-- ✅ Linux (using `ping -c`)
-- ✅ macOS (using `ping -c`)
+---
 
 ## 🤝 Contributing
 
-1. Fork this repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing-feature'`)
-4. Push to branch (`git push origin-feature/amazing-feature`)
-5. Create a Pull Request
+1. Fork this repository  
+2. Create a feature branch  
+3. Commit your changes  
+4. Push your branch  
+5. Open a Pull Request  
+
+---
 
 ## 📄 License
+MIT License. See the LICENSE file for details.
 
-MIT License - see the LICENSE file for full details.
+---
 
-## 🔗 Reference
-
-Taking reference to the traditional ping command, which displays output like:
-
-```
-Reply from 8.8.8.8: bytes=32 time=882ms TTL=114
-```
-
-or
-
-```
-Request timed out.
-```
-
-PingX is an enhancement of the ping command that now includes color styling and additional features for a better experience.
+## 💡 Inspiration
+PingX is inspired by the traditional system ping tool—but enhanced with color, statistics, and optional speed test to improve readability and give a better CLI experience.
