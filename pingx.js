@@ -4,14 +4,12 @@ const { spawn } = require("child_process");
 const chalk = require("chalk");
 const { Command } = require("commander");
 
-// Simple speed test helper: download a test file and upload a buffer to measure Mbps
 async function speedTest() {
   const https = require("https");
   const { URL } = require("url");
 
-  // Download test URL (small but sufficient for estimation). Change if needed.
-  const downloadUrl = "http://httpbin.org/bytes/1048576"; // 1MB of random bytes
-  const downloadSizeBytesEstimate = 1 * 1024 * 1024; // 1MB
+  const downloadUrl = "http://httpbin.org/bytes/1048576"; 
+  const downloadSizeBytesEstimate = 1 * 1024 * 1024;
 
   const doDownload = () =>
     new Promise((resolve, reject) => {
@@ -25,9 +23,9 @@ async function speedTest() {
           downloaded += chunk.length;
         });
         res.on("end", () => {
-          const duration = (Date.now() - start) / 1000; // seconds
+          const duration = (Date.now() - start) / 1000;
           const bytes = downloaded || downloadSizeBytesEstimate;
-          const mbps = (bytes * 8) / (duration * 1_000_000); // Mbps
+          const mbps = (bytes * 8) / (duration * 1_000_000);
           resolve({ mbps, bytes, duration });
         });
         res.on("error", reject);
@@ -42,7 +40,6 @@ async function speedTest() {
 
   const doUpload = () =>
     new Promise((resolve, reject) => {
-      // upload to httpbin.org with smaller payload
       const uploadSize = 512 * 1024; // 512KB
       const postData = Buffer.alloc(uploadSize, "a");
       const url = new URL("http://httpbin.org/post");
@@ -64,7 +61,7 @@ async function speedTest() {
         res.on("data", () => {});
         res.on("end", () => {
           const duration = (Date.now() - start) / 1000;
-          const mbps = (postData.length * 8) / (duration * 1_000_000); // Mbps
+          const mbps = (postData.length * 8) / (duration * 1_000_000);
           resolve({ mbps, bytes: postData.length, duration });
         });
       });
@@ -80,7 +77,6 @@ async function speedTest() {
   const dl = await doDownload();
   const ul = await doUpload();
 
-  // Normalize values to Mbps (ensure positive and finite)
   return {
     download: Number.isFinite(dl.mbps) && dl.mbps > 0 ? dl.mbps : 0,
     upload: Number.isFinite(ul.mbps) && ul.mbps > 0 ? ul.mbps : 0,
@@ -90,7 +86,6 @@ const os = require("os");
 
 const program = new Command();
 
-// ASCII Art Banner
 const banner = `
 ${chalk.cyan("┌─────────────────────────────────────────┐")}
 ${chalk.cyan("│")}           ${chalk.bold.magenta(
@@ -102,38 +97,34 @@ ${chalk.cyan("│")}     ${chalk.gray(
 ${chalk.cyan("└─────────────────────────────────────────┘")}
 `;
 
-// Color coding for response times
 function getTimeColor(timeMs) {
-  if (timeMs < 50) return chalk.green; // Hijau untuk < 50ms (sangat cepat)
-  if (timeMs < 100) return chalk.yellow; // Kuning untuk 50-100ms (sedang)
-  if (timeMs < 200) return chalk.hex("#FFA500"); // Orange untuk 100-200ms (agak lambat)
-  return chalk.red; // Merah untuk > 200ms (lambat)
+  if (timeMs < 50) return chalk.green;
+  if (timeMs < 100) return chalk.yellow;
+  if (timeMs < 200) return chalk.hex("#FFA500");
+  return chalk.red; 
 }
 
-// Get platform-specific ping command
 function getPingCommand(timeout) {
   const platform = os.platform();
   if (platform === "win32") {
     const args = ["-n", "1"];
     if (timeout) {
-      args.push("-w", (timeout * 1000).toString()); // Windows uses milliseconds
+      args.push("-w", (timeout * 1000).toString()); 
     }
     return { cmd: "ping", args };
   } else {
     const args = ["-c", "1"];
     if (timeout) {
-      args.push("-W", timeout.toString()); // Linux/Mac uses seconds
+      args.push("-W", timeout.toString());
     }
     return { cmd: "ping", args };
   }
 }
 
-// Parse ping output
 function parsePingOutput(output, target) {
   const lines = output.split("\n");
 
   for (let line of lines) {
-    // Windows format: Reply from x.x.x.x: bytes=32 time=123ms TTL=64
     const windowsMatch = line.match(
       /Reply from ([\d.]+): bytes=(\d+) time=(\d+)ms TTL=(\d+)/i
     );
@@ -147,7 +138,6 @@ function parsePingOutput(output, target) {
       };
     }
 
-    // Linux/Mac format: 64 bytes from x.x.x.x: icmp_seq=1 ttl=64 time=123.456 ms
     const unixMatch = line.match(
       /(\d+) bytes from ([\d.]+): icmp_seq=(\d+) ttl=(\d+) time=([\d.]+) ms/i
     );
@@ -162,7 +152,6 @@ function parsePingOutput(output, target) {
       };
     }
 
-    // Check for timeout
     if (
       line.includes("Request timed out") ||
       line.includes("Request timeout") ||
@@ -174,7 +163,6 @@ function parsePingOutput(output, target) {
       };
     }
 
-    // Check for unreachable
     if (
       line.includes("Destination host unreachable") ||
       line.includes("Host unreachable")
@@ -193,7 +181,6 @@ function parsePingOutput(output, target) {
   };
 }
 
-// Format and display result
 function displayResult(result, target, packetNum) {
   const timestamp = new Date().toLocaleTimeString();
   const prefix = chalk.gray(`[${timestamp}]`);
@@ -202,7 +189,6 @@ function displayResult(result, target, packetNum) {
     const timeColor = getTimeColor(result.time);
     const timeStr = timeColor(`${result.time}ms`);
 
-    // Status indicator
     let statusIndicator;
     if (result.time < 50) {
       statusIndicator = chalk.green("●");
@@ -239,7 +225,6 @@ function displayResult(result, target, packetNum) {
   }
 }
 
-// Main ping function
 async function pingHost(
   target,
   count = null,
@@ -299,7 +284,6 @@ async function pingHost(
         resolve(result);
       });
 
-      // Handle errors
       pingProcess.on("error", (err) => {
         console.log(`${chalk.red("Error:")} ${err.message}`);
         resolve({ success: false, error: err.message });
@@ -307,7 +291,6 @@ async function pingHost(
     });
   };
 
-  // Continuous ping or limited count
   if (count) {
     for (let i = 0; i < count; i++) {
       await performPing();
@@ -316,7 +299,6 @@ async function pingHost(
       }
     }
   } else {
-    // Continuous ping (Ctrl+C to stop)
     console.log(chalk.gray("Press Ctrl+C to stop...\n"));
 
     const runContinuous = async () => {
@@ -324,20 +306,17 @@ async function pingHost(
       setTimeout(runContinuous, interval);
     };
 
-    // Handle Ctrl+C gracefully
     process.on("SIGINT", () => {
       showStatistics(stats, target);
       process.exit(0);
     });
 
     runContinuous();
-    return; // Don't show stats for continuous mode here
+    return;
   }
 
-  // Show statistics for counted pings
   showStatistics(stats, target);
 
-  // If requested, run a simple speed test (download + upload)
   if (doSpeed) {
     try {
       const speeds = await speedTest();
@@ -358,7 +337,6 @@ async function pingHost(
   }
 }
 
-// Show ping statistics
 function showStatistics(stats, target) {
   const lossPercentage =
     stats.sent > 0
@@ -398,7 +376,6 @@ function showStatistics(stats, target) {
   console.log(chalk.cyan("─".repeat(50)));
 }
 
-// CLI Setup
 program
   .name("pingx")
   .description("An improved ping command with colorful styling")
@@ -422,14 +399,13 @@ program
   .action((target, options) => {
     const count = options.count ? parseInt(options.count) : null;
     const interval = parseInt(options.interval);
-    // Handle timeout option - if -t is used without value, it becomes true
     let timeout;
     if (options.timeout === true) {
-      timeout = 4; // default when -t is used without argument
+      timeout = 4;
     } else if (options.timeout) {
       timeout = parseInt(options.timeout);
     } else {
-      timeout = 4; // default when -t is not used
+      timeout = 4;
     }
 
     if (options.count && (count <= 0 || isNaN(count))) {
@@ -450,7 +426,6 @@ program
     pingHost(target, count, interval, timeout, options.speed);
   });
 
-// Handle no arguments
 if (process.argv.length <= 2) {
   console.log(banner);
   program.help();
