@@ -1,6 +1,6 @@
 {
   "name": "@xavorus/pingx",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "An improved ping command with colorful styling",
   "main": "pingx.js",
   "bin": {
