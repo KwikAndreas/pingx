@@ -89,7 +89,7 @@ const program = new Command();
 const banner = `
 ${chalk.cyan("┌─────────────────────────────────────────┐")}
 ${chalk.cyan("│")}           ${chalk.bold.magenta(
-  "PingX v1.0.1"
+  "PingX v1.0.5"
 )}             ${chalk.cyan("│")}
 ${chalk.cyan("│")}     ${chalk.gray(
   "Improved ping with colors"

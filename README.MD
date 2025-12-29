@@ -1,13 +1,17 @@
-# PingX - Enhanced Cross-Platform Ping CLI 🔵⚡
+# PingX - Enhanced Cross-Platform Ping CLI 🔵
 
 PingX is a modern, colorful, and feature-rich alternative to the traditional **ping** command.  
 It provides improved readability, detailed statistics, speed test capability, and a polished CLI experience across **Windows, Linux, and macOS**.
+
+<p align="left">
+  <img src="docs/Pingx2.webp" alt="PingX CLI Preview" width="700">
+</p>
 
 ---
 
 ## ✨ Features
 
-### 🎨 Color-Enhanced Output  
+### 🎨 Color-Enhanced Output  q
 Ping responses are displayed with dynamic colors based on latency:
 
 | Latency         | Color  | Meaning        |
@@ -114,25 +118,6 @@ pingx google.com -c 3 -s
 ```
 Download: 28.52 Mbps
 Upload:   10.31 Mbps
-```
-
----
-
-## 🛠 Development
-
-### Run tests
-```sh
-npm test
-```
-
-### Manual test
-```sh
-node pingx.js google.com -c 3
-```
-
-### Install globally from source
-```sh
-npm run install-global
 ```
 
 ---
