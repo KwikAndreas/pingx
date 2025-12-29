@@ -4,7 +4,7 @@
   "description": "An improved ping command with colorful styling",
   "main": "pingx.js",
   "bin": {
-    "pingx": "./pingx.js"
+    "pingx": "pingx.js"
   },
   "scripts": {
     "test": "node pingx.js 8.8.8.8",

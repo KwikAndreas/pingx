@@ -3,9 +3,14 @@
 PingX is a modern, colorful, and feature-rich alternative to the traditional **ping** command.  
 It provides improved readability, detailed statistics, speed test capability, and a polished CLI experience across **Windows, Linux, and macOS**.
 
-<p align="left">
-  <img src="docs/Pingx2.webp" alt="PingX CLI Preview" width="700">
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/KwikAndreas/pingx/main/docs/PingX.webp"
+    alt="PingX CLI Preview"
+    width="700"
+  />
 </p>
+
 
 ---
 
